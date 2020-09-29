@@ -27,6 +27,13 @@
             "error", "never"
         ],
         "indent": "error",
+        "brace-style": [
+            "error",
+            "allman",
+            {
+                "allowSingleLine": true
+            }
+        ],
         "keyword-spacing": "error",
         "linebreak-style": [
             "error",

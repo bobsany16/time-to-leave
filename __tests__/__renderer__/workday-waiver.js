@@ -11,7 +11,8 @@ const {
     setHours
 } = require('../../src/workday-waiver');
 
-function prepareMockup() {
+function prepareMockup() 
+{
     const waivedWorkdays = new Store({ name: 'waived-workdays' });
     waivedWorkdays.clear();
     const workdayWaiverHtml = path.join(__dirname, '../../src/workday-waiver.html');
@@ -22,7 +23,8 @@ function prepareMockup() {
     populateList();
 }
 
-function addTestWaiver(day, hours, reason) {
+function addTestWaiver(day, hours, reason) 
+{
     $('#reason').val(reason);
     setDates(day);
     setHours(hours);
@@ -30,17 +32,21 @@ function addTestWaiver(day, hours, reason) {
     addWaiver();
 }
 
-function testWaiverCount(expected) {
+function testWaiverCount(expected) 
+{
     const waivedWorkdays = new Store({ name: 'waived-workdays' });
     expect(waivedWorkdays.size).toBe(expected);
     expect($('#waiver-list-table tbody')[0].rows.length).toBe(expected);
 }
 
-describe('Test Workday Waiver Window', function() {
+describe('Test Workday Waiver Window', function() 
+{
     process.env.NODE_ENV = 'test';
 
-    describe('Adding new waivers update the db and the page', function() {
-        test('One Waiver', () => {
+    describe('Adding new waivers update the db and the page', function() 
+    {
+        test('One Waiver', () => 
+        {
             prepareMockup();
 
             testWaiverCount(0);
@@ -48,7 +54,8 @@ describe('Test Workday Waiver Window', function() {
             testWaiverCount(1);
         });
 
-        test('One + two Waivers', () => {
+        test('One + two Waivers', () => 
+        {
             prepareMockup();
             //Start with none
             testWaiverCount(0);

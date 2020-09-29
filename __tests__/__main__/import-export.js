@@ -10,10 +10,12 @@ const fs = require('fs');
 const Store = require('electron-store');
 const path = require('path');
 
-describe('Import export', function() {
+describe('Import export', function() 
+{
     process.env.NODE_ENV = 'test';
 
-    describe('validEntry(entry)', function() {
+    describe('validEntry(entry)', function() 
+    {
         const goodRegularEntry = {'type': 'regular', 'date': '2020-06-03', 'data': 'day-begin', 'hours': '08:00'};
         const goodFlexibleEntry = {'type': 'flexible', 'date': '2020-06-03', 'values': ['08:00', '12:00', '13:00', '14:00']};
         const goodWaivedEntry = {'type': 'waived', 'date': '2020-06-03', 'data': 'waived', 'hours': '08:00'};
@@ -21,13 +23,15 @@ describe('Import export', function() {
         const badFlexibleEntry = {'type': 'flexible', 'date': '2020-06-03', 'values': ['not-an-hour']};
         const badFlexibleEntry2 = {'type': 'flexible', 'date': '2020-06-03', 'values': 'not-an-array'};
         const badWaivedEntry = {'type': 'regular', 'date': '2020-06-03', 'data': 'day-begin', 'hours': 'not-an-hour'};
-        test('should be valid', () => {
+        test('should be valid', () => 
+        {
             expect(validEntry(goodRegularEntry)).toBeTruthy();
             expect(validEntry(goodWaivedEntry)).toBeTruthy();
             expect(validEntry(goodFlexibleEntry)).toBeTruthy();
         });
 
-        test('should not be valid', () => {
+        test('should not be valid', () => 
+        {
             expect(validEntry(badRegularEntry)).not.toBeTruthy();
             expect(validEntry(badWaivedEntry)).not.toBeTruthy();
             expect(validEntry(badFlexibleEntry)).not.toBeTruthy();
@@ -70,8 +74,10 @@ describe('Import export', function() {
 
     const folder = fs.mkdtempSync('import-export');
 
-    describe('exportDatabaseToFile', function() {
-        test('Check that export works', () => {
+    describe('exportDatabaseToFile', function() 
+    {
+        test('Check that export works', () => 
+        {
             expect(exportDatabaseToFile(path.join(folder, 'exported_file.ttldb'))).toBeTruthy();
             expect(exportDatabaseToFile('/not/a/valid/path')).not.toBeTruthy();
         });
@@ -87,8 +93,10 @@ describe('Import export', function() {
     const invalidEntriesFile = path.join(folder, 'invalid.ttldb');
     fs.writeFileSync(invalidEntriesFile, invalidEntriesContent, 'utf-8');
 
-    describe('importDatabaseFromFile', function() {
-        test('Check that import works', () => {
+    describe('importDatabaseFromFile', function() 
+    {
+        test('Check that import works', () => 
+        {
             expect(importDatabaseFromFile([path.join(folder, 'exported_file.ttldb')])['result']).toBeTruthy();
             expect(importDatabaseFromFile(['/not/a/valid/path'])['result']).not.toBeTruthy();
             expect(importDatabaseFromFile(['/not/a/valid/path'])['failed']).toBe(0);
@@ -102,8 +110,10 @@ describe('Import export', function() {
         '2020-3-2': {'values': ['10:00', '18:00']}
     };
 
-    describe('migrateFixedDbToFlexible', function() {
-        test('Check that migration works', () => {
+    describe('migrateFixedDbToFlexible', function() 
+    {
+        test('Check that migration works', () => 
+        {
             expect(flexibleStore.size).toBe(2);
             flexibleStore.clear();
             expect(flexibleStore.size).toBe(0);
@@ -114,7 +124,8 @@ describe('Import export', function() {
         });
     });
 
-    afterAll(() => {
+    afterAll(() => 
+    {
         fs.rmdirSync(folder, {recursive: true});
     });
 });

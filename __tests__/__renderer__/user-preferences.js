@@ -7,7 +7,8 @@ const {
 } = require('../../js/user-preferences');
 const fs = require('fs');
 
-describe('User Preferences save/load', () => {
+describe('User Preferences save/load', () => 
+{
     process.env.NODE_ENV = 'test';
 
     // Remove preferences file to guarantee equal execution of tests
@@ -20,19 +21,23 @@ describe('User Preferences save/load', () => {
 
     const empty = {};
 
-    describe('savePreferences() and getUserPreferences()', () => {
+    describe('savePreferences() and getUserPreferences()', () => 
+    {
 
-        test('getUserPreferences() before saving any', () => {
+        test('getUserPreferences() before saving any', () => 
+        {
             expect(savePreferences(defaultPreferences)).toBeDefined();
             expect(getUserPreferences()).not.toStrictEqual(empty);
             expect(getUserPreferences()).toStrictEqual(defaultPreferences);
         });
 
-        test('savePreferences()', () => {
+        test('savePreferences()', () => 
+        {
             expect(savePreferences(testPreferences)).toBeDefined();
         });
 
-        test('getUserPreferences() to check that it saved', () => {
+        test('getUserPreferences() to check that it saved', () => 
+        {
             expect(getUserPreferences()).toStrictEqual(testPreferences);
             expect(savePreferences(defaultPreferences)).toBeDefined();
         });

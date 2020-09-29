@@ -5,7 +5,8 @@ const themeOptions = ['light', 'dark', 'cadent-star'];
  * @param {string} testTheme
  * @return {boolean}
  */
-function isValidTheme(testTheme) {
+function isValidTheme(testTheme) 
+{
     return themeOptions.indexOf(testTheme) >= 0;
 }
 
@@ -14,8 +15,10 @@ function isValidTheme(testTheme) {
  * @param {string} theme
  * @return {boolean} If the theme application was successful
  * */
-function applyTheme(theme) {
-    if (isValidTheme(theme) === false) {
+function applyTheme(theme) 
+{
+    if (isValidTheme(theme) === false) 
+    {
         return false;
     }
 

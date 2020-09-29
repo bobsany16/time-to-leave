@@ -5,9 +5,12 @@ const { BrowserWindow, dialog } = remote;
  * Binds to the JS "window" the shortcut CTRL+SHIFT+I to toggle Chrome Dev Tools.
  * @param {Window} window
  */
-function bindDevToolsShortcut(window) {
-    window.addEventListener('keyup', (event) => {
-        if (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 105)) { // 'i' or 'I'
+function bindDevToolsShortcut(window) 
+{
+    window.addEventListener('keyup', (event) => 
+    {
+        if (event.ctrlKey && event.shiftKey && (event.keyCode === 73 || event.keyCode === 105)) 
+        { // 'i' or 'I'
             BrowserWindow.getFocusedWindow().webContents.toggleDevTools();
             event.preventDefault();
             return false;
@@ -20,7 +23,8 @@ function bindDevToolsShortcut(window) {
  * @param {Object.<string, any>} options
  * @param {function} successCallback
  */
-function showDialog(options, successCallback) {
+function showDialog(options, successCallback) 
+{
     options['title'] = options['title'] || 'Time to Leave';
     dialog.showMessageBox(BrowserWindow.getFocusedWindow(), options).then(successCallback);
 }
@@ -29,7 +33,8 @@ function showDialog(options, successCallback) {
  * Opens an electron dialog just like a JS alert().
  * @param {string} message
  */
-function showAlert(message) {
+function showAlert(message) 
+{
     let options = {
         'title': 'Time to Leave',
         'message': message

@@ -4,7 +4,8 @@ const { createWindow } = require('./js/main-window');
 const { mainWindow } = require('./js/windows');
 const { notify } = require('./js/notification');
 
-ipcMain.on('SET_WAIVER_DAY', (event, waiverDay) => {
+ipcMain.on('SET_WAIVER_DAY', (event, waiverDay) => 
+{
     global.waiverDay = waiverDay;
 });
 
@@ -14,22 +15,27 @@ var launchDate = new Date();
 var recommendPunchIn = false;
 setTimeout(() => { recommendPunchIn = true; }, 30 * 60 * 1000);
 
-process.on('uncaughtException', function(err) {
-    if (!err.message.includes('net::ERR_NETWORK_CHANGED')) {
+process.on('uncaughtException', function(err) 
+{
+    if (!err.message.includes('net::ERR_NETWORK_CHANGED')) 
+    {
         console.error((new Date).toUTCString() + ' uncaughtException:', err.message);
         console.error(err.stack);
         process.exit(1);
     }
 });
 
-function checkIdleAndNotify() {
-    if (recommendPunchIn) {
+function checkIdleAndNotify() 
+{
+    if (recommendPunchIn) 
+    {
         recommendPunchIn = false;
         notify('Don\'t forget to punch in!');
     }
 }
 
-function refreshOnDayChange() {
+function refreshOnDayChange() 
+{
     var today = new Date();
     if (today > launchDate)
     {
@@ -47,20 +53,28 @@ function refreshOnDayChange() {
 // Some APIs can only be used after this event occurs.
 // Check first to see if the app is aleady running,
 // fail out gracefully if so.
-if (!app.requestSingleInstanceLock()) {
+if (!app.requestSingleInstanceLock()) 
+{
     app.exit(0);
-} else {
-    app.on('second-instance', () => {
+}
+else 
+{
+    app.on('second-instance', () => 
+    {
         // Someone tried to run a second instance, we should focus our window.
-        if (mainWindow) {
-            if (mainWindow.isMinimized()) {
+        if (mainWindow) 
+        {
+            if (mainWindow.isMinimized()) 
+            {
                 mainWindow.restore();
             }
             mainWindow.focus();
-        } });
+        } 
+    });
 }
 
-app.on('ready', () => {
+app.on('ready', () => 
+{
     createWindow();
     setInterval(refreshOnDayChange, 60 * 60 * 1000);
     const { powerMonitor } = require('electron');
@@ -70,30 +84,39 @@ app.on('ready', () => {
 
 // Emitted before the application starts closing its windows.
 // It's not emitted when closing the windows
-app.on('before-quit', () => {
+app.on('before-quit', () => 
+{
     app.isQuitting = true;
 });
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
+app.on('window-all-closed', () => 
+{
     app.quit();
 });
 
-app.on('activate', () => {
+app.on('activate', () => 
+{
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
+    if (mainWindow === null) 
+    {
         createWindow();
-    } else {
+    }
+    else 
+    {
         mainWindow.show();
     }
 });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-try {
+try 
+{
     require('electron-reloader')(module);
-} catch (_) {
+}
+catch (_) 
+{
     // eslint-disable-next-line no-empty
     // We don't need to do anything in this block.
 }
