@@ -38,11 +38,12 @@ function populateLanguages(i18n)
         );
     });
     // Select current display language
+    /* istanbul ignore else */
     if ('language' in usersStyles)
     {
         $('#language').val(usersStyles['language']);
     }
-    $('#language').change(function()
+    $('#language').on('change', function()
     {
         preferences['language'] = this.value;
         i18n.changeLanguage(this.value);
@@ -53,7 +54,7 @@ function populateLanguages(i18n)
 
 function listenerLanguage()
 {
-    $('#language').change(function()
+    $('#language').on('change', function()
     {
         console.log('PREFERENCE_SAVE_DATA_NEEDED');
         preferences['language'] = this.value;
@@ -92,10 +93,12 @@ function changeValue(type, new_val)
     updateUserPreferences();
 }
 
-$(() =>
+function renderPreferencesWindow()
 {
     // Theme-handling should be towards the top. Applies theme early so it's more natural.
     let theme = 'theme';
+
+    /* istanbul ignore else */
     if (theme in usersStyles)
     {
         $('#' + theme).val(usersStyles[theme]);
@@ -106,49 +109,49 @@ $(() =>
     preferences[theme] = selectedThemeOption;
     $('html').attr('data-theme', selectedThemeOption);
 
+    /* istanbul ignore else */
     if ('view' in usersStyles)
     {
         $('#view').val(usersStyles['view']);
     }
 
+    /* istanbul ignore else */
     if ('number-of-entries' in usersStyles)
     {
         $('#number-of-entries').val(usersStyles['number-of-entries']);
     }
 
-    $('input[type="checkbox"]').change(function()
+    $('input[type="checkbox"]').on('change', function()
     {
-        preferences[this.name] = this.checked;
-        ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
+        changeValue(this.name, this.checked);
     });
 
-    $('#hours-per-day').change(function()
+    $('#hours-per-day').on('change', function()
     {
+        /* istanbul ignore else */
         if (this.checkValidity() === true)
         {
-            preferences[this.name] = this.value;
-            ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
+            changeValue(this.name, this.value);
         }
     });
 
-    $('input[type="number"], input[type="date"]').change(function()
+    $('input[type="number"], input[type="date"]').on('change', function()
     {
-        preferences[this.name] = this.value;
-        ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
+        changeValue(this.name, this.value);
     });
 
-    $('#theme').on('change', () =>
+    $('#theme').on('change', function()
     {
         changeValue('theme', this.value);
         applyTheme(this.value);
     });
 
-    $('#view').on('change', () =>
+    $('#view').on('change', function()
     {
         changeValue('view', this.value);
     });
 
-    $('#number-of-entries').on('change', () =>
+    $('#number-of-entries').on('change', function()
     {
         changeValue('number-of-entries', this.value);
     });
@@ -157,8 +160,10 @@ $(() =>
     {
         let input = $(this);
         let name = input.attr('name');
+
         if (input.attr('type') === 'checkbox')
         {
+            /* istanbul ignore else */
             if (name in usersStyles)
             {
                 input.prop('checked', usersStyles[name]);
@@ -169,6 +174,7 @@ $(() =>
             ['text', 'number', 'date'].indexOf(input.attr('type')) > -1
         )
         {
+            /* istanbul ignore else */
             if (name in usersStyles)
             {
                 input.val(usersStyles[name]);
@@ -188,7 +194,7 @@ $(() =>
     );
     notificationsInterval.prop('disabled', !repetition.is(':checked'));
 
-    notification.change(function()
+    notification.on('change', function()
     {
         repetition.prop('disabled', !notification.is(':checked'));
         repetition.prop(
@@ -198,15 +204,22 @@ $(() =>
         notificationsInterval.prop('disabled', !repetition.is(':checked'));
     });
 
-    repetition.change(function()
+    repetition.on('change', function()
     {
         notificationsInterval.prop('disabled', !repetition.is(':checked'));
     });
 
     bindDevToolsShortcut(window);
+}
+
+$(() =>
+{
+    renderPreferencesWindow();
 });
 
 module.exports = {
     refreshContent,
-    changeValue
+    populateLanguages,
+    listenerLanguage,
+    renderPreferencesWindow,
 };

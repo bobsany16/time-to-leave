@@ -8,10 +8,16 @@ const {
     getPreferencesFilePath,
     savePreferences
 } = require('../../js/user-preferences');
+const i18n = require('../../src/configs/i18next.config');
 
 /* eslint-disable-next-line no-global-assign */
 window.$ = require('jquery');
-const { refreshContent, changeValue } = require('../../src/preferences');
+const {
+    refreshContent,
+    populateLanguages,
+    listenerLanguage,
+    renderPreferencesWindow,
+} = require('../../src/preferences');
 
 function prepareMockup()
 {
@@ -34,6 +40,54 @@ describe('Test Preferences Window', () =>
     testPreferences['view'] = 'day';
     testPreferences['theme'] = 'light';
 
+    describe('Initial window with default preferences', () =>
+    {
+        test('Displays window correctly', () =>
+        {
+            prepareMockup();
+
+            renderPreferencesWindow();
+
+            //testing to see some of the items are correctly displayed or not
+            expect($('#number-of-entries').val()).toBe('fixed');
+            expect($('#view').val()).toBe('month');
+        });
+    });
+
+    describe('Changing value of workday', () =>
+    {
+        test('Uncheck Monday', () =>
+        {
+            prepareMockup();
+
+            testPreferences['working-days-monday'] = false;
+
+            $('#monday').val(testPreferences['working-days-monday']);
+
+            savePreferences(testPreferences);
+            refreshContent();
+
+            expect($('#monday').val()).toBe('false');
+        });
+    });
+
+    describe('Changing value of hours-per-day', () =>
+    {
+        test('Changing 8-hr per day to 6', () =>
+        {
+            prepareMockup();
+
+            testPreferences['hours-per-day'] = '06:00';
+
+            $('#hours-per-day').val(testPreferences['hours-per-day']);
+
+            savePreferences(testPreferences);
+            refreshContent();
+
+            expect($('#hours-per-day').val()).toBe('06:00');
+        });
+    });
+
     describe('Changing value of number-of-entries', () =>
     {
         test('Changing number-of-entries to flexible', () =>
@@ -41,7 +95,6 @@ describe('Test Preferences Window', () =>
             prepareMockup();
 
             $('#number-of-entries').val(testPreferences['number-of-entries']);
-            changeValue('number-of-entries', 'flexible');
 
             savePreferences(testPreferences);
             refreshContent();
@@ -56,7 +109,6 @@ describe('Test Preferences Window', () =>
             prepareMockup();
 
             $('#view').val(testPreferences['view']);
-            changeValue('view', 'day');
 
             savePreferences(testPreferences);
             refreshContent();
@@ -71,11 +123,30 @@ describe('Test Preferences Window', () =>
             prepareMockup();
 
             $('#theme').val(testPreferences['theme']);
-            changeValue('theme', 'light');
 
             savePreferences(testPreferences);
             refreshContent();
             expect($('#theme').val()).toBe('light');
+        });
+    });
+
+    describe('Changing language', () =>
+    {
+        test('From en to pt_BR', () =>
+        {
+            prepareMockup();
+            populateLanguages(i18n);
+            listenerLanguage();
+
+            expect($('#language').val()).toBe('en');
+
+            testPreferences['language'] = 'pt-BR';
+            $('#language').val(testPreferences['language']);
+
+            savePreferences(testPreferences);
+            refreshContent();
+
+            expect($('#language').val()).toBe('pt-BR');
         });
     });
 });
