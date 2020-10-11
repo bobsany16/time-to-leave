@@ -6,13 +6,12 @@ const path = require('path');
 const {
     defaultPreferences,
     getPreferencesFilePath,
-    getUserPreferences,
     savePreferences
 } = require('../../js/user-preferences');
 
 /* eslint-disable-next-line no-global-assign */
 window.$ = require('jquery');
-require('../../src/preferences');
+const { refreshContent, changeValue } = require('../../src/preferences');
 
 function prepareMockup()
 {
@@ -23,7 +22,7 @@ function prepareMockup()
     document.body.innerHTML = htmlDoc.body.innerHTML;
 }
 
-describe('Test Preferences Window', function()
+describe('Test Preferences Window', () =>
 {
     process.env.NODE_ENV = 'test';
 
@@ -32,21 +31,51 @@ describe('Test Preferences Window', function()
 
     let testPreferences = defaultPreferences;
     testPreferences['number-of-entries'] = 'flexible';
+    testPreferences['view'] = 'day';
+    testPreferences['theme'] = 'light';
 
-
-    describe('Changing value of number-of-entries', function()
+    describe('Changing value of number-of-entries', () =>
     {
         test('Changing number-of-entries to flexible', () =>
         {
             prepareMockup();
 
             $('#number-of-entries').val(testPreferences['number-of-entries']);
-            savePreferences(testPreferences);
-            let new_preferences = getUserPreferences();
+            changeValue('number-of-entries', 'flexible');
 
-            expect($('#number-of-entries').val()).toBe(
-                new_preferences['number-of-entries']
-            );
+            savePreferences(testPreferences);
+            refreshContent();
+            expect($('#number-of-entries').val()).toBe('flexible');
+        });
+    });
+
+    describe('Changing value of view', () =>
+    {
+        test('Changing view from month to day', () =>
+        {
+            prepareMockup();
+
+            $('#view').val(testPreferences['view']);
+            changeValue('view', 'day');
+
+            savePreferences(testPreferences);
+            refreshContent();
+            expect($('#view').val()).toBe('day');
+        });
+    });
+
+    describe('Changing value of theme', () =>
+    {
+        test('Changing theme from system-default to light', () =>
+        {
+            prepareMockup();
+
+            $('#theme').val(testPreferences['theme']);
+            changeValue('theme', 'light');
+
+            savePreferences(testPreferences);
+            refreshContent();
+            expect($('#theme').val()).toBe('light');
         });
     });
 });

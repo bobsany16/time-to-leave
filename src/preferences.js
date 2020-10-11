@@ -12,6 +12,7 @@ const $ = require('jquery');
 const jqueryI18next = require('jquery-i18next');
 
 // Global values for preferences page
+
 let usersStyles = getUserPreferences();
 let preferences = usersStyles;
 
@@ -30,7 +31,11 @@ function populateLanguages(i18n)
     languageOpts.empty();
     $.each(config.languages, function()
     {
-        languageOpts.append($('<option />').val(this).text(i18n.t(`$Language.${this}`)));
+        languageOpts.append(
+            $('<option />')
+                .val(this)
+                .text(i18n.t(`$Language.${this}`))
+        );
     });
     // Select current display language
     if ('language' in usersStyles)
@@ -71,6 +76,22 @@ i18n.on('loaded', () =>
     translatePage(i18n.language);
 });
 
+function refreshContent()
+{
+    usersStyles = getUserPreferences();
+}
+
+function updateUserPreferences()
+{
+    ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
+}
+
+function changeValue(type, new_val)
+{
+    preferences[type] = new_val;
+    updateUserPreferences();
+}
+
 $(() =>
 {
     // Theme-handling should be towards the top. Applies theme early so it's more natural.
@@ -79,7 +100,9 @@ $(() =>
     {
         $('#' + theme).val(usersStyles[theme]);
     }
-    let selectedThemeOption = $('#' + theme).children('option:selected').val();
+    let selectedThemeOption = $('#' + theme)
+        .children('option:selected')
+        .val();
     preferences[theme] = selectedThemeOption;
     $('html').attr('data-theme', selectedThemeOption);
 
@@ -114,24 +137,20 @@ $(() =>
         ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
     });
 
-    $('#theme').change(function()
+    $('#theme').on('change', () =>
     {
-        preferences['theme'] = this.value;
-        ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
-
+        changeValue('theme', this.value);
         applyTheme(this.value);
     });
 
-    $('#view').change(function()
+    $('#view').on('change', () =>
     {
-        preferences['view'] = this.value;
-        ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
+        changeValue('view', this.value);
     });
 
-    $('#number-of-entries').change(function()
+    $('#number-of-entries').on('change', () =>
     {
-        preferences['number-of-entries'] = this.value;
-        ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
+        changeValue('number-of-entries', this.value);
     });
 
     $('input').each(function()
@@ -146,7 +165,9 @@ $(() =>
             }
             preferences[name] = input.prop('checked');
         }
-        else if (['text', 'number', 'date'].indexOf(input.attr('type')) > -1)
+        else if (
+            ['text', 'number', 'date'].indexOf(input.attr('type')) > -1
+        )
         {
             if (name in usersStyles)
             {
@@ -161,13 +182,19 @@ $(() =>
     const notificationsInterval = $('#notifications-interval');
 
     repetition.prop('disabled', !notification.is(':checked'));
-    repetition.prop('checked', notification.is(':checked') && usersStyles['repetition']);
+    repetition.prop(
+        'checked',
+        notification.is(':checked') && usersStyles['repetition']
+    );
     notificationsInterval.prop('disabled', !repetition.is(':checked'));
 
     notification.change(function()
     {
         repetition.prop('disabled', !notification.is(':checked'));
-        repetition.prop('checked', notification.is(':checked') && usersStyles['repetition']);
+        repetition.prop(
+            'checked',
+            notification.is(':checked') && usersStyles['repetition']
+        );
         notificationsInterval.prop('disabled', !repetition.is(':checked'));
     });
 
@@ -178,3 +205,8 @@ $(() =>
 
     bindDevToolsShortcut(window);
 });
+
+module.exports = {
+    refreshContent,
+    changeValue
+};
