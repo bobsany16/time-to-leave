@@ -12,7 +12,6 @@ const $ = require('jquery');
 const jqueryI18next = require('jquery-i18next');
 
 // Global values for preferences page
-
 let usersStyles = getUserPreferences();
 let preferences = usersStyles;
 
@@ -87,9 +86,9 @@ function updateUserPreferences()
     ipcRenderer.send('PREFERENCE_SAVE_DATA_NEEDED', preferences);
 }
 
-function changeValue(type, new_val)
+function changeValue(type, newVal)
 {
-    preferences[type] = new_val;
+    preferences[type] = newVal;
     updateUserPreferences();
 }
 
