@@ -143,11 +143,6 @@ describe('Test Preferences Window', () =>
             changeItemValue('overall-balance-start-date', '2020-01-01');
             checkRenderedItem('overall-balance-start-date');
         });
-        //this one doesn't exist in preferences.html
-        // test('Change update-remind-me-after to 2020-01-02', () => {
-        //    changeItemValue( "update-remind-me-after", "2020-01-02");
-        //     checkRenderedItem("update-remind-me-after");
-        // })
         test('Negates all default working-days values', () =>
         {
             weekdays.forEach(value =>
