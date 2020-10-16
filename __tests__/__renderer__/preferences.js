@@ -180,10 +180,6 @@ describe('Test Preferences Window', () =>
             changeItemValue('number-of-entries', 'flexible');
             checkRenderedItem('number-of-entries');
         });
-        // test("Changing language from en to pt-BR", () => {
-        //     changeItemValue("language", "pt-BR");
-        //     checkRenderedItem("language");
-        // });
     });
 });
 
